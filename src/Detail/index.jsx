@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Discount from "../Discount";
+import TabContent from "../TabContent";
+import { Nav } from "react-bootstrap";
 
 function Detail({ product }) {
 
@@ -9,12 +11,15 @@ function Detail({ product }) {
   // 숫자말고 문자 입력 시 처리를 확인 할 논리값
   const [state, setState] = useState(false)
 
+  // 탭을 눌렀을 때 선택되는 페이지값을 갖는 스테이트
+  const [tabState, setTabState] = useState(0)
+
   // useEffect 실행 확인
   useEffect(() => {
     // 타이머를 붙이고 2초 후에 Discount가 사라지도록
-    const myTimer = setTimeout(()=> setShowAlert(false), 2000)
+    const myTimer = setTimeout(() => setShowAlert(false), 2000)
     // 기존 사용한 타이머를 사용
-    return ()=>{
+    return () => {
       clearTimeout(myTimer);
     }
     // 처음 실행 될 때 딱 한번만 실행
@@ -22,10 +27,10 @@ function Detail({ product }) {
 
   // 입력 수량 확인 용 Effect
   // input 상자에만 반응
-  useEffect (()=>{
+  useEffect(() => {
     // inputData state가 문자면...
     // isNaN : is Not a Number
-    if(isNaN(inputData)){
+    if (isNaN(inputData)) {
       setState(true)
     } else {
       setState(false)
@@ -67,15 +72,31 @@ function Detail({ product }) {
         </div>
         <div className="col-md-6">
           <h4>{findProduct.title}</h4>
-          <p>{findProduct.content}</p>          
-          { state && <div>오류</div>}
+          <p>{findProduct.content}</p>
+          {state && <div>오류</div>}
           <p> 수량 :
-            <input type="text" onChange={(e)=>{setInputData(e.target.value)}}/>
+            <input type="text" onChange={(e) => { setInputData(e.target.value) }} />
           </p>
           <p>{findProduct.price}</p>
           <button className="btn btn-danger">주문하기</button>
         </div>
       </div>
+      <Nav variant="tabs" defaultActiveKey="/Home">
+        <Nav.Item>
+          <Nav.Link eventKey="link-1" onClick={()=>{setTabState(0)}}>
+            버튼 1</Nav.Link>
+        </Nav.Item>
+        <Nav.Item>
+          <Nav.Link eventKey="link-2" onClick={()=>{setTabState(1)}}>
+            버튼 2</Nav.Link>
+        </Nav.Item>
+        <Nav.Item>
+          <Nav.Link eventKey="link-3" onClick={()=>{setTabState(2)}}>
+            버튼 3</Nav.Link>
+        </Nav.Item>
+      </Nav>
+      {/* 선택한 탭의 내용이 표시되는 공간 */}
+      <TabContent tabState={tabState}/>
     </div>
   )
 }
